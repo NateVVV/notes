@@ -1,43 +1,52 @@
 <template>
     <v-container>
         <v-expansion-panels focusable>
-            <v-expansion-panel v-for="(note, i) in notes" :key="i">
-                <v-expansion-panel-header v-slot="{ open }">
-                    <v-row no-gutters>
-                        <v-col cols="4" class="font-weight-bold">
-                            {{ note.title }}
-                        </v-col>
-                        <v-col
-                            cols="6"
-                            class="d-inline-block text-truncate text--secondary"
-                        >
-                            <v-fade-transition leave-absolute>
-                                <span v-if="!open">
-                                    {{ note.content }}
-                                </span>
-                            </v-fade-transition>
-                        </v-col>
-                    </v-row>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                    <v-row>
-                        <v-col cols="12">
-                            <v-textarea
-                                v-model="note.content"
-                                @change="changeNote(i)"
+            <draggable v-model="notes">
+                <v-expansion-panel v-for="(note, i) in notes" :key="i">
+                    <v-expansion-panel-header v-slot="{ open }">
+                        <v-row no-gutters>
+                            <v-col cols="4" class="font-weight-bold">
+                                {{ note.title }}
+                            </v-col>
+                            <v-col
+                                cols="6"
+                                class="d-block deep-purple text-truncate"
                             >
-                            </v-textarea>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col>
-                            <v-btn @click="deleteNote(i)" color="red"
-                                >Delete</v-btn
-                            >
-                        </v-col>
-                    </v-row>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
+                                <v-fade-transition
+                                    leave-absolute
+                                    class="d-block"
+                                >
+                                    <span
+                                        v-if="!open"
+                                        class="d-inline-block text-truncate text--secondary"
+                                    >
+                                        {{ note.content }}
+                                    </span>
+                                </v-fade-transition>
+                            </v-col>
+                            <v-col cols="2"> </v-col>
+                        </v-row>
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-textarea
+                                    v-model="note.content"
+                                    @change="changeNote(i)"
+                                >
+                                </v-textarea>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-btn @click="deleteNote(i)" color="red"
+                                    >Delete</v-btn
+                                >
+                            </v-col>
+                        </v-row>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
+            </draggable>
         </v-expansion-panels>
         <v-card class="pa-3">
             <v-text-field v-model="newNote.title" label="Title" required>
@@ -53,7 +62,10 @@
 </template>
 
 <script>
+import draggable from "vuedraggable";
+
 export default {
+    components: { draggable },
     data: () => ({
         notes: [],
         newNote: { title: "", content: "" },
