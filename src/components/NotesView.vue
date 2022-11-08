@@ -7,9 +7,12 @@
                         <v-col cols="4" class="font-weight-bold">
                             {{ note.title }}
                         </v-col>
-                        <v-col cols="6" class="text-truncate">
+                        <v-col
+                            cols="6"
+                            class="d-inline-block text-truncate text--secondary"
+                        >
                             <v-fade-transition leave-absolute>
-                                <span v-if="!open" class="text--secondary">
+                                <span v-if="!open">
                                     {{ note.content }}
                                 </span>
                             </v-fade-transition>
