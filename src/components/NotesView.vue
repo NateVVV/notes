@@ -117,7 +117,6 @@ export default {
             localStorage.setItem("notes", JSON.stringify(this.notes));
         },
         draggedItem() {
-            console.log("change");
             this.writeLocalStorage();
         },
     },
