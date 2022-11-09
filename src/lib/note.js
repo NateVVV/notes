@@ -6,7 +6,7 @@ export const createNote = (title, content, id, color) => {
         title,
         content,
         id: id ? id : uuidv4(),
-        color,
+        color: color ? color : "#FFFFFF",
     };
 };
 

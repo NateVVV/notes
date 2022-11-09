@@ -6,7 +6,11 @@
             tag="v-expansion-panels"
             :component-data="expansionPanelsData"
         >
-            <v-expansion-panel v-for="(note, i) in notes" :key="note.id">
+            <v-expansion-panel
+                v-for="(note, i) in notes"
+                :key="note.id"
+                :style="{ backgroundColor: note.color }"
+            >
                 <v-expansion-panel-header v-slot="{ open }">
                     <v-row no-gutters>
                         <v-col cols="4" class="font-weight-bold">
@@ -34,11 +38,13 @@
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col>
-                            <v-btn @click="deleteNote(i)" color="red"
-                                >Delete</v-btn
-                            >
-                        </v-col>
+                        <v-btn @click="deleteNote(i)" color="red">Delete</v-btn>
+                        <v-color-picker
+                            class="ma-2"
+                            hide-inputs
+                            v-model="note.color"
+                            @update:color="updateColor"
+                        ></v-color-picker>
                     </v-row>
                 </v-expansion-panel-content>
             </v-expansion-panel>
@@ -107,6 +113,9 @@ export default {
             localStorage.setItem("notes", JSON.stringify(this.notes));
         },
         draggedItem() {
+            this.writeLocalStorage();
+        },
+        updateColor() {
             this.writeLocalStorage();
         },
     },
