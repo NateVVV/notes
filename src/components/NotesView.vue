@@ -61,8 +61,7 @@
 <script>
 import draggable from "vuedraggable";
 
-import { v4 as uuidv4 } from "uuid";
-import { createNotes } from "@/lib/note";
+import { createNote, createNotes } from "@/lib/note";
 
 export default {
     name: "NotesView",
@@ -82,18 +81,19 @@ export default {
     },
     methods: {
         storeNote() {
-            const note = {
-                title: this.newNote.title.trim(),
-                content: this.newNote.content.trim(),
-                id: uuidv4(),
-            };
+            try {
+                const note = createNote(
+                    this.newNote.title,
+                    this.newNote.content
+                );
 
-            if (note.title == "") return;
-
-            this.notes.push(note);
-            this.writeLocalStorage();
-            this.newNote.title = "";
-            this.newNote.content = "";
+                this.notes.push(note);
+                this.writeLocalStorage();
+                this.newNote.title = "";
+                this.newNote.content = "";
+            } catch (e) {
+                console.error(`Did not create note. Error: ${e}`);
+            }
         },
         deleteNote(index) {
             this.notes.splice(index, 1);
