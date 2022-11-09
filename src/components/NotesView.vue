@@ -5,13 +5,14 @@
             @change="draggedItem"
             tag="v-expansion-panels"
             :component-data="expansionPanelsData"
+            handle=".handle"
         >
             <v-expansion-panel
                 v-for="(note, i) in notes"
                 :key="note.id"
                 :style="{ backgroundColor: note.color }"
             >
-                <v-expansion-panel-header v-slot="{ open }">
+                <v-expansion-panel-header v-slot="{ open }" class="handle">
                     <v-row no-gutters>
                         <v-col cols="4" class="font-weight-bold">
                             {{ note.title }}
