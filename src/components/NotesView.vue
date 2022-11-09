@@ -2,44 +2,52 @@
     <v-container>
         <v-expansion-panels focusable>
             <draggable v-model="notes" @change="draggedItem">
-                <v-expansion-panel v-for="(note, i) in notes" :key="note.id">
-                    <v-expansion-panel-header v-slot="{ open }">
-                        <v-row no-gutters>
-                            <v-col cols="4" class="font-weight-bold">
-                                {{ note.title }}
-                            </v-col>
-                            <v-col cols="6">
-                                <v-fade-transition
-                                    leave-absolute
-                                    class="d-block"
-                                >
-                                    <span v-if="!open" class="text--secondary">
-                                        {{ note.content }}
-                                    </span>
-                                </v-fade-transition>
-                            </v-col>
-                            <v-col cols="2"> </v-col>
-                        </v-row>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                        <v-row>
-                            <v-col cols="12">
-                                <v-textarea
-                                    v-model="note.content"
-                                    @change="changeNote(i)"
-                                >
-                                </v-textarea>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col>
-                                <v-btn @click="deleteNote(i)" color="red"
-                                    >Delete</v-btn
-                                >
-                            </v-col>
-                        </v-row>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
+                <TransitionGroup>
+                    <v-expansion-panel
+                        v-for="(note, i) in notes"
+                        :key="note.id"
+                    >
+                        <v-expansion-panel-header v-slot="{ open }">
+                            <v-row no-gutters>
+                                <v-col cols="4" class="font-weight-bold">
+                                    {{ note.title }}
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-fade-transition
+                                        leave-absolute
+                                        class="d-block"
+                                    >
+                                        <span
+                                            v-if="!open"
+                                            class="text--secondary"
+                                        >
+                                            {{ note.content }}
+                                        </span>
+                                    </v-fade-transition>
+                                </v-col>
+                                <v-col cols="2"> </v-col>
+                            </v-row>
+                        </v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-textarea
+                                        v-model="note.content"
+                                        @change="changeNote(i)"
+                                    >
+                                    </v-textarea>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-btn @click="deleteNote(i)" color="red"
+                                        >Delete</v-btn
+                                    >
+                                </v-col>
+                            </v-row>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel></TransitionGroup
+                >
             </draggable>
         </v-expansion-panels>
         <v-card class="pa-3">
