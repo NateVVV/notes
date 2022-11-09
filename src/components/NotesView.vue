@@ -1,55 +1,48 @@
 <template>
     <v-container>
-        <v-expansion-panels focusable>
-            <draggable v-model="notes" @change="draggedItem">
-                <TransitionGroup>
-                    <v-expansion-panel
-                        v-for="(note, i) in notes"
-                        :key="note.id"
-                    >
-                        <v-expansion-panel-header v-slot="{ open }">
-                            <v-row no-gutters>
-                                <v-col cols="4" class="font-weight-bold">
-                                    {{ note.title }}
-                                </v-col>
-                                <v-col cols="6">
-                                    <v-fade-transition
-                                        leave-absolute
-                                        class="d-block"
-                                    >
-                                        <span
-                                            v-if="!open"
-                                            class="text--secondary"
-                                        >
-                                            {{ note.content }}
-                                        </span>
-                                    </v-fade-transition>
-                                </v-col>
-                                <v-col cols="2"> </v-col>
-                            </v-row>
-                        </v-expansion-panel-header>
-                        <v-expansion-panel-content>
-                            <v-row>
-                                <v-col cols="12">
-                                    <v-textarea
-                                        v-model="note.content"
-                                        @change="changeNote(i)"
-                                    >
-                                    </v-textarea>
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-col>
-                                    <v-btn @click="deleteNote(i)" color="red"
-                                        >Delete</v-btn
-                                    >
-                                </v-col>
-                            </v-row>
-                        </v-expansion-panel-content>
-                    </v-expansion-panel></TransitionGroup
-                >
-            </draggable>
-        </v-expansion-panels>
+        <draggable
+            v-model="notes"
+            @change="draggedItem"
+            tag="v-expansion-panels"
+            :component-data="expansionPanelsData "
+        >
+            <v-expansion-panel v-for="(note, i) in notes" :key="note.id">
+                <v-expansion-panel-header v-slot="{ open }">
+                    <v-row no-gutters>
+                        <v-col cols="4" class="font-weight-bold">
+                            {{ note.title }}
+                        </v-col>
+                        <v-col cols="6">
+                            <v-fade-transition leave-absolute class="d-block">
+                                <span v-if="!open" class="text--secondary">
+                                    {{ note.content }}
+                                </span>
+                            </v-fade-transition>
+                        </v-col>
+                        <v-col cols="2"> </v-col>
+                    </v-row>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-textarea
+                                v-model="note.content"
+                                @change="changeNote(i)"
+                                auto-grow
+                            >
+                            </v-textarea>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-btn @click="deleteNote(i)" color="red"
+                                >Delete</v-btn
+                            >
+                        </v-col>
+                    </v-row>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </draggable>
         <v-card class="pa-3">
             <v-text-field v-model="newNote.title" label="Title" required>
             </v-text-field>
@@ -71,10 +64,14 @@ import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
 
 export default {
+    name: "NotesView",
     components: { draggable },
     data: () => ({
         notes: [],
         newNote: { title: "", content: "" },
+        expansionPanelsData: {
+            props: { focusable: true },
+        },
     }),
     mounted() {
         const notes = localStorage.getItem("notes");

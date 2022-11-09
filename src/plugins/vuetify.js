@@ -1,7 +1,6 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
+import Vue from "vue";
+import Vuetify, { VExpansionPanels } from "vuetify/lib";
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, { components: { VExpansionPanels } });
 
-export default new Vuetify({
-});
+export default new Vuetify({});
