@@ -1,25 +1,19 @@
 <template>
     <v-container>
         <v-expansion-panels focusable>
-            <draggable v-model="notes">
-                <v-expansion-panel v-for="(note, i) in notes" :key="i">
+            <draggable v-model="notes" @change="draggedItem">
+                <v-expansion-panel v-for="(note, i) in notes" :key="note.id">
                     <v-expansion-panel-header v-slot="{ open }">
                         <v-row no-gutters>
                             <v-col cols="4" class="font-weight-bold">
                                 {{ note.title }}
                             </v-col>
-                            <v-col
-                                cols="6"
-                                class="d-block deep-purple text-truncate"
-                            >
+                            <v-col cols="6">
                                 <v-fade-transition
                                     leave-absolute
                                     class="d-block"
                                 >
-                                    <span
-                                        v-if="!open"
-                                        class="d-inline-block text-truncate text--secondary"
-                                    >
+                                    <span v-if="!open" class="text--secondary">
                                         {{ note.content }}
                                     </span>
                                 </v-fade-transition>
@@ -61,8 +55,12 @@
     </v-container>
 </template>
 
+<style scoped></style>
+
 <script>
 import draggable from "vuedraggable";
+
+import { v4 as uuidv4 } from "uuid";
 
 export default {
     components: { draggable },
@@ -74,13 +72,22 @@ export default {
         const notes = localStorage.getItem("notes");
         if (!notes) return;
 
-        this.notes = JSON.parse(notes);
+        const parsedNotes = JSON.parse(notes);
+        for (const note of parsedNotes) {
+            if (!note.id) {
+                note.id = uuidv4();
+            }
+        }
+
+        this.notes = parsedNotes;
+        console.log("Test");
     },
     methods: {
         storeNote() {
             const note = {
                 title: this.newNote.title.trim(),
                 content: this.newNote.content.trim(),
+                id: uuidv4(),
             };
 
             if (note.title == "") return;
@@ -100,6 +107,10 @@ export default {
         },
         writeLocalStorage() {
             localStorage.setItem("notes", JSON.stringify(this.notes));
+        },
+        draggedItem() {
+            console.log("change");
+            this.writeLocalStorage();
         },
     },
 };
