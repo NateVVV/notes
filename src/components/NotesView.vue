@@ -4,7 +4,7 @@
             v-model="notes"
             @change="draggedItem"
             tag="v-expansion-panels"
-            :component-data="expansionPanelsData "
+            :component-data="expansionPanelsData"
         >
             <v-expansion-panel v-for="(note, i) in notes" :key="note.id">
                 <v-expansion-panel-header v-slot="{ open }">
@@ -62,6 +62,7 @@
 import draggable from "vuedraggable";
 
 import { v4 as uuidv4 } from "uuid";
+import { createNotes } from "@/lib/note";
 
 export default {
     name: "NotesView",
@@ -77,15 +78,7 @@ export default {
         const notes = localStorage.getItem("notes");
         if (!notes) return;
 
-        const parsedNotes = JSON.parse(notes);
-        for (const note of parsedNotes) {
-            if (!note.id) {
-                note.id = uuidv4();
-            }
-        }
-
-        this.notes = parsedNotes;
-        console.log("Test");
+        this.notes = createNotes(JSON.parse(notes));
     },
     methods: {
         storeNote() {
