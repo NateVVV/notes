@@ -25,7 +25,13 @@
                         <v-col cols="6">
                             <v-fade-transition leave-absolute class="d-block">
                                 <span v-if="!open" class="text--secondary">
-                                    {{ note.content }}
+                                    <v-chip
+                                        v-for="label in note.labels"
+                                        :key="label"
+                                        small
+                                    >
+                                        {{ label }}</v-chip
+                                    >
                                 </span>
                             </v-fade-transition>
                         </v-col>
@@ -55,10 +61,9 @@
                             v-model="note.labels"
                             :items="labels"
                             chips
-                            clearable
                             label="Labels"
                             multiple
-                            solo
+                            outlined
                         >
                             <template
                                 v-slot:selection="{
