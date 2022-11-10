@@ -82,37 +82,31 @@ export default {
     }),
     mounted() {
         this.notes = note.get();
+
+        // write the changes before the site is closed
+        onbeforeunload = () => {
+            note.store(this.notes);
+        };
     },
     methods: {
         storeNote() {
             try {
-                const note = note.create(
-                    this.newNote.title,
-                    this.newNote.content
-                );
+                const n = note.create(this.newNote.title, this.newNote.content);
+                this.notes.push(n);
 
-                this.notes.push(note);
-                note.store();
                 this.newNote.title = "";
                 this.newNote.content = "";
             } catch (e) {
-                console.error(`Did not create note. Error: ${e}`);
+                console.error(`Did not create note. ${e}`);
             }
         },
         deleteNote(index) {
             this.notes.splice(index, 1);
-            note.store();
         },
-        changeNote(index) {
-            console.log("change", index);
-            note.store();
-        },
-        draggedItem() {
-            note.store();
-        },
-        updateColor() {
-            note.store();
-        },
+        // eslint-disable-next-line
+        changeNote(index) {},
+        draggedItem() {},
+        updateColor() {},
     },
 };
 </script>
