@@ -1,12 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
 
-export const create = (title, content, id, color) => {
+export const create = (title, content, id, color, labels) => {
     if (!title) throw "Title not given";
     return {
         title,
         content,
         id: id ? id : uuidv4(),
         color: color ? color : "#FFFFFF",
+        labels: labels ? labels : [],
     };
 };
 
@@ -14,7 +15,7 @@ const createNotes = (data) => {
     return data
         .map((n) => {
             try {
-                return create(n.title, n.content, n.id, n.color);
+                return create(n.title, n.content, n.id, n.color, n.labels);
             } catch (e) {
                 console.error(`Skipped note. Error: ${e}`);
             }

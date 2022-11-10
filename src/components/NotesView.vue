@@ -1,5 +1,10 @@
 <template>
     <v-container>
+        <v-row id="labels">
+            <v-chip v-for="label in labels" :key="label">
+                {{ label }}
+            </v-chip>
+        </v-row>
         <draggable
             v-model="notes"
             @change="draggedItem"
@@ -46,6 +51,34 @@
                             v-model="note.color"
                             @update:color="updateColor"
                         ></v-color-picker>
+                        <v-combobox
+                            v-model="note.labels"
+                            :items="labels"
+                            chips
+                            clearable
+                            label="Labels"
+                            multiple
+                            solo
+                        >
+                            <template
+                                v-slot:selection="{
+                                    attrs,
+                                    item,
+                                    select,
+                                    selected,
+                                }"
+                            >
+                                <v-chip
+                                    v-bind="attrs"
+                                    :input-value="selected"
+                                    close
+                                    @click="select"
+                                    @click:close="removeLabel(i, item)"
+                                >
+                                    {{ item }}
+                                </v-chip>
+                            </template>
+                        </v-combobox>
                     </v-row>
                 </v-expansion-panel-content>
             </v-expansion-panel>
@@ -63,7 +96,13 @@
     </v-container>
 </template>
 
-<style scoped></style>
+<style scoped>
+#labels {
+    margin: 5px;
+    margin-top: 0;
+    gap: 10px;
+}
+</style>
 
 <script>
 import draggable from "vuedraggable";
@@ -79,6 +118,7 @@ export default {
         expansionPanelsData: {
             props: { focusable: true },
         },
+        labels: ["one", "two", "three"],
     }),
     mounted() {
         this.notes = note.get();
@@ -107,6 +147,13 @@ export default {
         changeNote(index) {},
         draggedItem() {},
         updateColor() {},
+        removeLabel(index, label) {
+            console.log(`remove label ${label} at index ${index}`);
+            this.notes[index].labels.splice(
+                this.notes[index].labels.indexOf(label),
+                1
+            );
+        },
     },
 };
 </script>
