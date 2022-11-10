@@ -28,7 +28,9 @@ export const store = (notes) => {
 
 export const get = () => {
     const notes = localStorage.getItem("notes");
-    if (!notes) return;
+    if (!notes || notes == "undefined") return [];
 
     return createNotes(JSON.parse(notes));
 };
+
+export default { create, get, store };

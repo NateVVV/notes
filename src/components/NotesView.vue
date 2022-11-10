@@ -68,7 +68,7 @@
 <script>
 import draggable from "vuedraggable";
 
-import * as note from "@/lib/note";
+import note from "@/lib/note";
 
 export default {
     name: "NotesView",
