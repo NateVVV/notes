@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-export const createNote = (title, content, id, color) => {
+export const create = (title, content, id, color) => {
     if (!title) throw "Title not given";
     return {
         title,
@@ -10,14 +10,25 @@ export const createNote = (title, content, id, color) => {
     };
 };
 
-export const createNotes = (data) => {
+const createNotes = (data) => {
     return data
         .map((n) => {
             try {
-                return createNote(n.title, n.content, n.id, n.color);
+                return create(n.title, n.content, n.id, n.color);
             } catch (e) {
                 console.error(`Skipped note. Error: ${e}`);
             }
         })
         .filter((n) => n);
+};
+
+export const store = (notes) => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+};
+
+export const get = () => {
+    const notes = localStorage.getItem("notes");
+    if (!notes) return;
+
+    return createNotes(JSON.parse(notes));
 };

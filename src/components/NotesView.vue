@@ -68,7 +68,7 @@
 <script>
 import draggable from "vuedraggable";
 
-import { createNote, createNotes } from "@/lib/note";
+import * as note from "@/lib/note";
 
 export default {
     name: "NotesView",
@@ -81,21 +81,18 @@ export default {
         },
     }),
     mounted() {
-        const notes = localStorage.getItem("notes");
-        if (!notes) return;
-
-        this.notes = createNotes(JSON.parse(notes));
+        this.notes = note.get();
     },
     methods: {
         storeNote() {
             try {
-                const note = createNote(
+                const note = note.create(
                     this.newNote.title,
                     this.newNote.content
                 );
 
                 this.notes.push(note);
-                this.writeLocalStorage();
+                note.store();
                 this.newNote.title = "";
                 this.newNote.content = "";
             } catch (e) {
@@ -104,20 +101,17 @@ export default {
         },
         deleteNote(index) {
             this.notes.splice(index, 1);
-            this.writeLocalStorage();
+            note.store();
         },
         changeNote(index) {
             console.log("change", index);
-            this.writeLocalStorage();
-        },
-        writeLocalStorage() {
-            localStorage.setItem("notes", JSON.stringify(this.notes));
+            note.store();
         },
         draggedItem() {
-            this.writeLocalStorage();
+            note.store();
         },
         updateColor() {
-            this.writeLocalStorage();
+            note.store();
         },
     },
 };
